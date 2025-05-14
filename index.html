@@ -12,6 +12,7 @@
       background: linear-gradient(#ffe4ec, #f8bbd0);
       color: #333;
       text-align: center;
+      overflow-x: hidden;
     }
 
     h1 {
@@ -46,13 +47,15 @@
       font-size: 1.3rem;
       font-weight: bold;
       color: #d81b60;
+      min-height: 2.5rem;
+      transition: opacity 0.5s ease;
     }
 
     .photo-gallery {
       display: none;
       margin-top: 2rem;
       opacity: 0;
-      transition: opacity 0.5s ease;
+      transition: opacity 0.8s ease;
     }
 
     .photo-gallery.show {
@@ -62,15 +65,31 @@
 
     .photo-gallery img {
       width: 100%;
+      max-width: 500px;
       border-radius: 12px;
       cursor: pointer;
       margin-bottom: 1rem;
+      transition: transform 0.3s ease;
+    }
+
+    .photo-gallery img:hover {
+      transform: scale(1.03);
     }
 
     .caption {
       font-size: 1.1rem;
       margin-top: 1rem;
       color: #d81b60;
+      padding: 0 1rem;
+      animation: scrivi 4s steps(60, end);
+      white-space: nowrap;
+      overflow: hidden;
+      border-right: 2px solid #d81b60;
+    }
+
+    @keyframes scrivi {
+      from { width: 0; }
+      to { width: 100%; }
     }
 
     .back-button {
@@ -97,6 +116,15 @@
       border-radius: 12px;
       border: none;
       cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+
+    #heartButton button:hover {
+      transform: scale(1.1);
+    }
+
+    audio {
+      display: none;
     }
   </style>
 </head>
@@ -115,6 +143,11 @@
   </div>
 
   <div class="photo-gallery" id="gallery"></div>
+
+  <audio id="musica" loop>
+    <source src="https://cdn.pixabay.com/download/audio/2023/05/16/audio_3a89f91178.mp3?filename=romantic-background-music-145634.mp3" type="audio/mpeg">
+    Il tuo browser non supporta l'audio.
+  </audio>
 
   <script>
     const frasi = [
@@ -147,7 +180,12 @@
 
     function updatePunteggio(val) {
       document.getElementById("rangeVal").textContent = val + "%";
-      document.getElementById("risultato").textContent = frasi[val / 10 - 1];
+      const result = document.getElementById("risultato");
+      result.style.opacity = 0;
+      setTimeout(() => {
+        result.textContent = frasi[val / 10 - 1];
+        result.style.opacity = 1;
+      }, 200);
 
       if (parseInt(val) === 100) {
         document.getElementById("heartButton").style.display = "block";
@@ -157,6 +195,7 @@
     }
 
     function visualizzaFoto() {
+      document.getElementById("musica").play();
       const gallery = document.getElementById("gallery");
       gallery.innerHTML = immagini.map(img => `
         <img src="${img.src}" onclick="ingrandisciImmagine('${img.src}', '${img.frase.replace(/'/g, "\\'")}')" alt="Foto romantica">
@@ -181,6 +220,8 @@
       gallery.classList.remove("show");
       setTimeout(() => {
         gallery.innerHTML = "";
+        document.getElementById("musica").pause();
+        document.getElementById("musica").currentTime = 0;
       }, 500);
     }
 
