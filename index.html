@@ -140,7 +140,7 @@
           <th>Azione</th>
         </tr>
         <tr>
-          <td>50%</td>
+          <td><input type="range" id="range" min="10" max="100" step="10" value="10" onchange="updatePunteggio()"></td>
           <td><button onclick="mostraFraseRomantica()">Fai il Test</button></td>
         </tr>
       </table>
@@ -157,14 +157,27 @@
   </div>
 
   <script>
-    function mostraFraseRomantica() {
+    function updatePunteggio() {
+      const punteggio = document.getElementById("range").value;
+      mostraFraseRomantica(punteggio);
+    }
+
+    function mostraFraseRomantica(punteggio) {
       const frasi = [
         "Mi fai sentire speciale ogni giorno.",
         "Non c'è niente di più bello che stare insieme a te.",
-        "Ogni momento con te è un sogno che si avvera."
+        "Ogni momento con te è un sogno che si avvera.",
+        "La tua presenza rende ogni cosa migliore.",
+        "Ti amo più di quanto le parole possano esprimere.",
+        "Sei la ragione per cui sorrido ogni giorno.",
+        "Non posso immaginare la mia vita senza di te.",
+        "Ogni secondo passato con te è un regalo prezioso.",
+        "Ogni tua parola è come una melodia per il mio cuore.",
+        "Mi fai sentire come se fossimo in un sogno eterno."
       ];
-      const randomIndex = Math.floor(Math.random() * frasi.length);
-      document.getElementById("risultato").innerHTML = frasi[randomIndex];
+
+      const index = Math.floor(punteggio / 10) - 1; // Calcola l'indice della frase in base al punteggio
+      document.getElementById("risultato").innerHTML = frasi[index];
     }
 
     function ingrandisciImmagine(url, frase) {
@@ -181,6 +194,9 @@
       const gallery = document.getElementById("gallery");
       gallery.style.display = "none";
     }
+
+    // Inizializza la pagina con il punteggio di partenza
+    mostraFraseRomantica(10);
   </script>
 </body>
 </html>
