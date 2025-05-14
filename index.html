@@ -3,83 +3,50 @@
 <head>
   <meta charset="UTF-8">
   <title>Quanto ti manco?</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
       margin: 0;
-      padding: 0;
+      padding: 1rem;
       font-family: 'Arial', sans-serif;
-      background: #f8bbd0;
-      background-image: url('https://via.placeholder.com/1500x1500/ffcccb/ffcccb'); /* Sfondo sfuocato */
-      background-size: cover;
-      background-attachment: fixed;
+      background: linear-gradient(#ffe4ec, #f8bbd0);
       color: #333;
       text-align: center;
-      padding: 2rem;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
     }
 
     h1 {
       color: #d81b60;
-      font-size: 3rem;
-      margin-bottom: 2rem;
-      text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+      font-size: 2rem;
+      margin-bottom: 1rem;
     }
 
     .table-container {
-      background: rgba(255, 255, 255, 0.8);
-      padding: 2rem;
+      background: rgba(255, 255, 255, 0.85);
+      padding: 1rem;
       border-radius: 15px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-      margin: 2rem auto;
-      max-width: 500px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      max-width: 90%;
+      margin: auto;
+    }
+
+    .range-input {
+      margin: 1rem 0;
+    }
+
+    input[type="range"] {
       width: 100%;
     }
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
+    .range-value {
       font-size: 1.2rem;
-    }
-
-    th, td {
-      padding: 0.8rem;
-      text-align: center;
-      border: 1px solid #ccc;
-    }
-
-    th {
-      background-color: #f06292;
-      color: white;
-      border-radius: 8px;
-    }
-
-    button {
-      padding: 0.7rem 1.5rem;
-      margin-top: 1rem;
-      font-size: 1rem;
-      border-radius: 12px;
-      border: none;
-      background-color: #d81b60;
-      color: white;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
-
-    button:hover {
-      background-color: #c2185b;
-    }
-
-    .emoji {
-      font-size: 2rem;
-      cursor: pointer;
+      margin-top: 0.5rem;
+      color: #d81b60;
+      font-weight: bold;
     }
 
     .result {
       margin-top: 1rem;
-      font-size: 1.5rem;
+      font-size: 1.3rem;
       font-weight: bold;
       color: #d81b60;
     }
@@ -87,116 +54,108 @@
     .photo-gallery {
       display: none;
       margin-top: 2rem;
-      text-align: center;
     }
 
     .photo-gallery img {
-      width: 80%;
-      max-width: 500px;
-      height: auto;
+      width: 100%;
       border-radius: 12px;
       cursor: pointer;
-      margin: 1rem 0;
-      transition: transform 0.3s ease;
-    }
-
-    .photo-gallery img:hover {
-      transform: scale(1.05);
     }
 
     .caption {
-      font-size: 1.2rem;
-      font-weight: bold;
+      font-size: 1.1rem;
       margin-top: 1rem;
       color: #d81b60;
     }
 
     .back-button {
       background-color: #42a5f5;
-      padding: 0.7rem 1.5rem;
+      padding: 0.5rem 1rem;
       margin-top: 1rem;
       font-size: 1rem;
       border-radius: 12px;
-      cursor: pointer;
-      display: inline-block;
-      text-decoration: none;
       color: white;
-      transition: background-color 0.3s ease;
+      border: none;
+      cursor: pointer;
     }
 
-    .back-button:hover {
-      background-color: #1e88e5;
+    #heartButton {
+      display: none;
+      margin-top: 1rem;
     }
 
+    #heartButton button {
+      font-size: 2rem;
+      padding: 1rem 2rem;
+      background-color: #d81b60;
+      color: white;
+      border-radius: 12px;
+      border: none;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
-  <div>
-    <h1>Quanto ti manco?</h1>
-    <div class="table-container">
-      <table>
-        <tr>
-          <th>Punteggio</th>
-          <th>Azione</th>
-        </tr>
-        <tr>
-          <td><input type="range" id="range" min="10" max="100" step="10" value="10" onchange="updatePunteggio()"></td>
-          <td><button onclick="mostraFraseRomantica()">Fai il Test</button></td>
-        </tr>
-      </table>
+  <h1>Quanto ti manco?</h1>
+
+  <div class="table-container">
+    <div class="range-input">
+      <input type="range" id="range" min="10" max="100" step="10" value="10" oninput="updatePunteggio(this.value)">
+      <div class="range-value" id="rangeVal">10%</div>
     </div>
-
     <div class="result" id="risultato"></div>
-
-    <div class="photo-gallery" id="gallery">
-      <img src="https://via.placeholder.com/600x400/ffcccb/ffcccb" onclick="ingrandisciImmagine('https://via.placeholder.com/600x400/ffcccb/ffcccb', 'Frase romantica 1')" alt="Foto 1">
-      <img src="https://via.placeholder.com/600x400/ff80ab/ff80ab" onclick="ingrandisciImmagine('https://via.placeholder.com/600x400/ff80ab/ff80ab', 'Frase romantica 2')" alt="Foto 2">
-      <p class="caption" id="caption"></p>
-      <button class="back-button" onclick="tornaAlMenu()">⬅️ Torna al menu</button>
+    <div id="heartButton">
+      <button onclick="visualizzaFoto()">💜</button>
     </div>
   </div>
 
+  <div class="photo-gallery" id="gallery">
+    <img src="https://via.placeholder.com/600x400/ffcccb/ffcccb" onclick="ingrandisciImmagine(this.src, 'Frase romantica 1')" alt="Foto 1">
+    <img src="https://via.placeholder.com/600x400/ff80ab/ff80ab" onclick="ingrandisciImmagine(this.src, 'Frase romantica 2')" alt="Foto 2">
+    <p class="caption" id="caption"></p>
+    <button class="back-button" onclick="tornaAlMenu()">⬅️ Torna al menu</button>
+  </div>
+
   <script>
-    function updatePunteggio() {
-      const punteggio = document.getElementById("range").value;
-      mostraFraseRomantica(punteggio);
+    const frasi = [
+      "Mi fai sentire speciale ogni giorno.",
+      "Non c'è niente di più bello che stare insieme a te.",
+      "Ogni momento con te è un sogno che si avvera.",
+      "La tua presenza rende ogni cosa migliore.",
+      "Ti amo più di quanto le parole possano esprimere.",
+      "Sei la ragione per cui sorrido ogni giorno.",
+      "Non posso immaginare la mia vita senza di te.",
+      "Ogni secondo passato con te è un regalo prezioso.",
+      "Ogni tua parola è come una melodia per il mio cuore.",
+      "Mi fai sentire come se fossimo in un sogno eterno."
+    ];
+
+    function updatePunteggio(val) {
+      document.getElementById("rangeVal").textContent = val + "%";
+      document.getElementById("risultato").textContent = frasi[val / 10 - 1];
+
+      if (parseInt(val) === 100) {
+        document.getElementById("heartButton").style.display = "block";
+      } else {
+        document.getElementById("heartButton").style.display = "none";
+      }
     }
 
-    function mostraFraseRomantica(punteggio) {
-      const frasi = [
-        "Mi fai sentire speciale ogni giorno.",
-        "Non c'è niente di più bello che stare insieme a te.",
-        "Ogni momento con te è un sogno che si avvera.",
-        "La tua presenza rende ogni cosa migliore.",
-        "Ti amo più di quanto le parole possano esprimere.",
-        "Sei la ragione per cui sorrido ogni giorno.",
-        "Non posso immaginare la mia vita senza di te.",
-        "Ogni secondo passato con te è un regalo prezioso.",
-        "Ogni tua parola è come una melodia per il mio cuore.",
-        "Mi fai sentire come se fossimo in un sogno eterno."
-      ];
-
-      const index = Math.floor(punteggio / 10) - 1; // Calcola l'indice della frase in base al punteggio
-      document.getElementById("risultato").innerHTML = frasi[index];
+    function visualizzaFoto() {
+      document.getElementById("gallery").style.display = "block";
     }
 
     function ingrandisciImmagine(url, frase) {
       const gallery = document.getElementById("gallery");
-      gallery.innerHTML = `<img src="${url}" alt="Immagine ingrandita">`;
-      const caption = document.createElement("p");
-      caption.classList.add("caption");
-      caption.textContent = frase;
-      gallery.appendChild(caption);
-      gallery.style.display = "block";
+      gallery.innerHTML = `<img src="${url}" alt="Immagine ingrandita"><p class="caption">${frase}</p><button class="back-button" onclick="tornaAlMenu()">⬅️ Torna al menu</button>`;
     }
 
     function tornaAlMenu() {
-      const gallery = document.getElementById("gallery");
-      gallery.style.display = "none";
+      document.getElementById("gallery").style.display = "none";
     }
 
-    // Inizializza la pagina con il punteggio di partenza
-    mostraFraseRomantica(10);
+    // inizializza con valore di partenza
+    updatePunteggio(10);
   </script>
 </body>
 </html>
