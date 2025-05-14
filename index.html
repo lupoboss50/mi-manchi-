@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Mi Manchi</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to bottom, #fce4ec, #ffffff);
+      text-align: center;
+      padding: 2rem;
+      color: #333;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      color: #ad1457;
+    }
+
+    input[type=range] {
+      width: 80%;
+      margin: 2rem 0;
+    }
+
+    #cuoreBtn {
+      display: none;
+      font-size: 2rem;
+      background-color: transparent;
+      border: none;
+      cursor: pointer;
+    }
+
+    #sezioneFoto {
+      display: none;
+      margin-top: 2rem;
+    }
+  </style>
+</head>
+<body>
+  <h1>Mi manchi</h1>
+
+  <input type="range" id="barra" min="0" max="100" value="0" oninput="controllaValore()">
+  <p id="valore">0%</p>
+
+  <button id="cuoreBtn" onclick="mostraSezione()">💜</button>
+
+  <div id="sezioneFoto">
+    <p>Qui metteremo le foto e le frasi con 🥹</p>
+  </div>
+
+  <script>
+    function controllaValore() {
+      const barra = document.getElementById("barra");
+      const valore = document.getElementById("valore");
+      const cuoreBtn = document.getElementById("cuoreBtn");
+
+      valore.textContent = barra.value + "%";
+
+      if (barra.value == 100) {
+        cuoreBtn.style.display = "inline";
+      } else {
+        cuoreBtn.style.display = "none";
+      }
+    }
+
+    function mostraSezione() {
+      document.getElementById("sezioneFoto").style.display = "block";
+    }
+  </script>
+</body>
+</html>
