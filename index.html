@@ -21,10 +21,7 @@
     }
 
     .table-container {
-      background: rgba(255, 255, 255, 0.85);
       padding: 1rem;
-      border-radius: 15px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
       max-width: 90%;
       margin: auto;
     }
@@ -54,12 +51,20 @@
     .photo-gallery {
       display: none;
       margin-top: 2rem;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+
+    .photo-gallery.show {
+      display: block;
+      opacity: 1;
     }
 
     .photo-gallery img {
       width: 100%;
       border-radius: 12px;
       cursor: pointer;
+      margin-bottom: 1rem;
     }
 
     .caption {
@@ -109,12 +114,7 @@
     </div>
   </div>
 
-  <div class="photo-gallery" id="gallery">
-    <img src="https://via.placeholder.com/600x400/ffcccb/ffcccb" onclick="ingrandisciImmagine(this.src, 'Frase romantica 1')" alt="Foto 1">
-    <img src="https://via.placeholder.com/600x400/ff80ab/ff80ab" onclick="ingrandisciImmagine(this.src, 'Frase romantica 2')" alt="Foto 2">
-    <p class="caption" id="caption"></p>
-    <button class="back-button" onclick="tornaAlMenu()">⬅️ Torna al menu</button>
-  </div>
+  <div class="photo-gallery" id="gallery"></div>
 
   <script>
     const frasi = [
@@ -130,6 +130,21 @@
       "Mi fai sentire come se fossimo in un sogno eterno."
     ];
 
+    const immagini = [
+      {
+        src: "1cca246a-e62e-4492-906a-192bca5f5c08.jpeg",
+        frase: "Con te ogni sguardo diventa poesia, e ogni silenzio è pieno d’amore."
+      },
+      {
+        src: "602d059e-3a49-4f71-b3f0-35e2a09f623a.jpeg",
+        frase: "Nel tuo sorriso ho trovato casa, e nel tuo cuore il mio destino."
+      },
+      {
+        src: "IMG_3844.jpeg",
+        frase: "Sei il mio universo in un abbraccio, il mio sempre nel caos del tempo."
+      }
+    ];
+
     function updatePunteggio(val) {
       document.getElementById("rangeVal").textContent = val + "%";
       document.getElementById("risultato").textContent = frasi[val / 10 - 1];
@@ -142,19 +157,33 @@
     }
 
     function visualizzaFoto() {
-      document.getElementById("gallery").style.display = "block";
+      const gallery = document.getElementById("gallery");
+      gallery.innerHTML = immagini.map(img => `
+        <img src="${img.src}" onclick="ingrandisciImmagine('${img.src}', '${img.frase.replace(/'/g, "\\'")}')" alt="Foto romantica">
+      `).join("") + `
+        <p class="caption" id="caption"></p>
+        <button class="back-button" onclick="tornaAlMenu()">⬅️ Torna al menu</button>
+      `;
+      gallery.classList.add("show");
     }
 
     function ingrandisciImmagine(url, frase) {
       const gallery = document.getElementById("gallery");
-      gallery.innerHTML = `<img src="${url}" alt="Immagine ingrandita"><p class="caption">${frase}</p><button class="back-button" onclick="tornaAlMenu()">⬅️ Torna al menu</button>`;
+      gallery.innerHTML = `
+        <img src="${url}" alt="Immagine ingrandita">
+        <p class="caption">${frase}</p>
+        <button class="back-button" onclick="tornaAlMenu()">⬅️ Torna al menu</button>
+      `;
     }
 
     function tornaAlMenu() {
-      document.getElementById("gallery").style.display = "none";
+      const gallery = document.getElementById("gallery");
+      gallery.classList.remove("show");
+      setTimeout(() => {
+        gallery.innerHTML = "";
+      }, 500);
     }
 
-    // inizializza con valore di partenza
     updatePunteggio(10);
   </script>
 </body>
