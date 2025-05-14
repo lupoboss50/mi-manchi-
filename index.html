@@ -2,69 +2,185 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8">
-  <title>Mi Manchi</title>
+  <title>Test Divino</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background: linear-gradient(to bottom, #fce4ec, #ffffff);
+      margin: 0;
+      padding: 0;
+      font-family: 'Arial', sans-serif;
+      background: #f8bbd0;
+      background-image: url('https://via.placeholder.com/1500x1500/ffcccb/ffcccb'); /* Sfondo sfuocato */
+      background-size: cover;
+      background-attachment: fixed;
+      color: #333;
       text-align: center;
       padding: 2rem;
-      color: #333;
+      filter: blur(5px); /* Sfocatura dello sfondo */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
     }
 
     h1 {
-      font-size: 2.5rem;
-      color: #ad1457;
+      color: #d81b60;
+      font-size: 3rem;
+      margin-bottom: 2rem;
+      text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
     }
 
-    input[type=range] {
-      width: 80%;
-      margin: 2rem 0;
+    .table-container {
+      background: rgba(255, 255, 255, 0.8);
+      padding: 2rem;
+      border-radius: 15px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      margin: 2rem auto;
+      max-width: 500px;
+      width: 100%;
     }
 
-    #cuoreBtn {
-      display: none;
-      font-size: 2rem;
-      background-color: transparent;
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 1.2rem;
+    }
+
+    th, td {
+      padding: 0.8rem;
+      text-align: center;
+      border: 1px solid #ccc;
+    }
+
+    th {
+      background-color: #f06292;
+      color: white;
+      border-radius: 8px;
+    }
+
+    button {
+      padding: 0.7rem 1.5rem;
+      margin-top: 1rem;
+      font-size: 1rem;
+      border-radius: 12px;
       border: none;
+      background-color: #d81b60;
+      color: white;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #c2185b;
+    }
+
+    .emoji {
+      font-size: 2rem;
       cursor: pointer;
     }
 
-    #sezioneFoto {
+    .result {
+      margin-top: 1rem;
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #d81b60;
+    }
+
+    .photo-gallery {
       display: none;
       margin-top: 2rem;
+      text-align: center;
     }
+
+    .photo-gallery img {
+      width: 80%;
+      max-width: 500px;
+      height: auto;
+      border-radius: 12px;
+      cursor: pointer;
+      margin: 1rem 0;
+      transition: transform 0.3s ease;
+    }
+
+    .photo-gallery img:hover {
+      transform: scale(1.05);
+    }
+
+    .caption {
+      font-size: 1.2rem;
+      font-weight: bold;
+      margin-top: 1rem;
+      color: #d81b60;
+    }
+
+    .back-button {
+      background-color: #42a5f5;
+      padding: 0.7rem 1.5rem;
+      margin-top: 1rem;
+      font-size: 1rem;
+      border-radius: 12px;
+      cursor: pointer;
+      display: inline-block;
+      text-decoration: none;
+      color: white;
+      transition: background-color 0.3s ease;
+    }
+
+    .back-button:hover {
+      background-color: #1e88e5;
+    }
+
   </style>
 </head>
 <body>
-  <h1>Mi manchi</h1>
+  <div>
+    <h1>Test Divino</h1>
+    <div class="table-container">
+      <table>
+        <tr>
+          <th>Punteggio</th>
+          <th>Azione</th>
+        </tr>
+        <tr>
+          <td>50%</td>
+          <td><button onclick="mostraFraseRomantica()">Fai il Test</button></td>
+        </tr>
+      </table>
+    </div>
 
-  <input type="range" id="barra" min="0" max="100" value="0" oninput="controllaValore()">
-  <p id="valore">0%</p>
+    <div class="result" id="risultato"></div>
 
-  <button id="cuoreBtn" onclick="mostraSezione()">💜</button>
-
-  <div id="sezioneFoto">
-    <p>Qui metteremo le foto e le frasi con 🥹</p>
+    <div class="photo-gallery" id="gallery">
+      <img src="https://via.placeholder.com/600x400/ffcccb/ffcccb" onclick="ingrandisciImmagine('https://via.placeholder.com/600x400/ffcccb/ffcccb', 'Frase romantica 1')" alt="Foto 1">
+      <img src="https://via.placeholder.com/600x400/ff80ab/ff80ab" onclick="ingrandisciImmagine('https://via.placeholder.com/600x400/ff80ab/ff80ab', 'Frase romantica 2')" alt="Foto 2">
+      <p class="caption" id="caption"></p>
+      <button class="back-button" onclick="tornaAlMenu()">⬅️ Torna al menu</button>
+    </div>
   </div>
 
   <script>
-    function controllaValore() {
-      const barra = document.getElementById("barra");
-      const valore = document.getElementById("valore");
-      const cuoreBtn = document.getElementById("cuoreBtn");
-
-      valore.textContent = barra.value + "%";
-
-      if (barra.value == 100) {
-        cuoreBtn.style.display = "inline";
-      } else {
-        cuoreBtn.style.display = "none";
-      }
+    function mostraFraseRomantica() {
+      const frasi = [
+        "Mi fai sentire speciale ogni giorno.",
+        "Non c'è niente di più bello che stare insieme a te.",
+        "Ogni momento con te è un sogno che si avvera."
+      ];
+      const randomIndex = Math.floor(Math.random() * frasi.length);
+      document.getElementById("risultato").innerHTML = frasi[randomIndex];
     }
 
-    function mostraSezione() {
-      document.getElementById("sezioneFoto").style.display = "block";
+    function ingrandisciImmagine(url, frase) {
+      const gallery = document.getElementById("gallery");
+      gallery.innerHTML = `<img src="${url}" alt="Immagine ingrandita">`;
+      const caption = document.createElement("p");
+      caption.classList.add("caption");
+      caption.textContent = frase;
+      gallery.appendChild(caption);
+      gallery.style.display = "block";
+    }
+
+    function tornaAlMenu() {
+      const gallery = document.getElementById("gallery");
+      gallery.style.display = "none";
     }
   </script>
 </body>
