@@ -232,13 +232,17 @@ e ogni momento con te è una poesia che non smetterò mai di scrivere.
       document.getElementById("btnVediPoesia").style.display = "none";
       document.getElementById("poesia").style.display = "none";
       document.getElementById("copyBtn").style.display = "none";
+
+      // Ri-mostra slider e risultato se erano nascosti
+      document.getElementById("slider-container").style.display = "block";
+      document.getElementById("gallery").style.display = "none";
     }
 
     function visualizzaFoto() {
       const gallery = document.getElementById("gallery");
       cliccate.clear(); // resetto le foto cliccate ogni volta che apro la galleria
       gallery.innerHTML = immagini.map((img, index) => `
-        <img src="${img.src}" onclick="ingrandisciImmagine('${img.src}', \`${img.frase}\`, ${index})">
+        <img src="${img.src}" onclick="ingrandisciImmagine('${img.src}', \`${img.frase}\`, ${index})" alt="Foto ${index + 1}">
       `).join("");
       gallery.style.display = "block";
 
@@ -253,7 +257,7 @@ e ogni momento con te è una poesia che non smetterò mai di scrivere.
       cliccate.add(index);
       const gallery = document.getElementById("gallery");
       gallery.innerHTML = `
-        <img src="${url}" alt="Foto">
+        <img src="${url}" alt="Foto" style="width: 100%; border-radius: 12px;">
         <p class="caption">${frase}</p>
         <button class="back-button" onclick="visualizzaFoto()">⬅️ Torna indietro</button>
       `;
@@ -267,14 +271,4 @@ e ogni momento con te è una poesia che non smetterò mai di scrivere.
     function mostraPoesia() {
       document.getElementById("poesia").style.display = "block";
       document.getElementById("copyBtn").style.display = "inline-block";
-      document.getElementById("btnVediPoesia").style.display = "none";
-      document.getElementById("gallery").style.display = "none";
-      // Mostro anche di nuovo il range e tutto per eventuali nuovi cicli
-      document.getElementById("slider-container").style.display = "block";
-    }
-
-    // Inizializzo il range
-    updatePunteggio(10);
-  </script>
-</body>
-</html>
+      document.get
