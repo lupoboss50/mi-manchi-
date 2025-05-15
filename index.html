@@ -98,6 +98,7 @@
       line-height: 1.6;
       white-space: pre-line;
       user-select: text;
+      display: none; /* nascosta all'inizio */
     }
     #copyBtn {
       margin-top: 1rem;
@@ -109,14 +110,43 @@
       padding: 0.8rem 2rem;
       cursor: pointer;
       transition: background 0.3s ease;
+      display: none; /* nascosto all'inizio */
     }
     #copyBtn:hover {
+      background-color: #c2185b;
+    }
+    #btnVediPoesia {
+      display: none;
+      margin-top: 1rem;
+      font-size: 1.6rem;
+      padding: 0.8rem 2rem;
+      background-color: #d81b60;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    #btnVediPoesia:hover {
       background-color: #c2185b;
     }
   </style>
 </head>
 <body>
   <h1>Quanto ti manco?</h1>
+
+  <div class="table-container" id="slider-container">
+    <input type="range" id="range" min="10" max="100" step="10" value="10" oninput="updatePunteggio(this.value)" />
+    <div class="range-value" id="rangeVal">10%</div>
+    <div class="result" id="risultato"></div>
+    <div id="heartButton">
+      <button onclick="visualizzaFoto()">💜</button>
+    </div>
+  </div>
+
+  <div class="photo-gallery" id="gallery"></div>
+
+  <button id="btnVediPoesia" onclick="mostraPoesia()">🥹</button>
 
   <div id="poesia">
 Federica, luce dolce nei miei giorni più bui,  
@@ -134,17 +164,6 @@ Sei il mio porto sicuro, il mio rifugio di pace e follia,
 e ogni momento con te è una poesia che non smetterò mai di scrivere.
   </div>
   <button id="copyBtn" onclick="copiaPoesia()">Conservami💜</button>
-
-  <div class="table-container">
-    <input type="range" id="range" min="10" max="100" step="10" value="10" oninput="updatePunteggio(this.value)" />
-    <div class="range-value" id="rangeVal">10%</div>
-    <div class="result" id="risultato"></div>
-    <div id="heartButton">
-      <button onclick="visualizzaFoto()">💜</button>
-    </div>
-  </div>
-
-  <div class="photo-gallery" id="gallery"></div>
 
   <script>
     // Poesia da copiare
@@ -201,29 +220,60 @@ e ogni momento con te è una poesia che non smetterò mai di scrivere.
       }
     ];
 
+    // Tiene traccia delle foto cliccate
+    let cliccate = new Set();
+
     function updatePunteggio(val) {
       document.getElementById("rangeVal").textContent = val + "%";
       document.getElementById("risultato").textContent = frasiRange[val / 10 - 1] || "";
       document.getElementById("heartButton").style.display = (parseInt(val) === 100) ? "block" : "none";
+
+      // Nascondo poesia e pulsanti se cambio il range dopo
+      document.getElementById("btnVediPoesia").style.display = "none";
+      document.getElementById("poesia").style.display = "none";
+      document.getElementById("copyBtn").style.display = "none";
     }
 
     function visualizzaFoto() {
       const gallery = document.getElementById("gallery");
-      gallery.innerHTML = immagini.map(img => `
-        <img src="${img.src}" onclick="ingrandisciImmagine('${img.src}', \`${img.frase}\`)">
+      cliccate.clear(); // resetto le foto cliccate ogni volta che apro la galleria
+      gallery.innerHTML = immagini.map((img, index) => `
+        <img src="${img.src}" onclick="ingrandisciImmagine('${img.src}', \`${img.frase}\`, ${index})">
       `).join("");
       gallery.style.display = "block";
+
+      // Nascondo range, risultato e heartButton mentre vedo le foto
+      document.getElementById("slider-container").style.display = "none";
+      document.getElementById("btnVediPoesia").style.display = "none";
+      document.getElementById("poesia").style.display = "none";
+      document.getElementById("copyBtn").style.display = "none";
     }
 
-    function ingrandisciImmagine(url, frase) {
+    function ingrandisciImmagine(url, frase, index) {
+      cliccate.add(index);
       const gallery = document.getElementById("gallery");
       gallery.innerHTML = `
         <img src="${url}" alt="Foto">
         <p class="caption">${frase}</p>
         <button class="back-button" onclick="visualizzaFoto()">⬅️ Torna indietro</button>
       `;
+
+      // Se ho cliccato tutte le foto mostro il pulsante 🥹 per vedere la poesia
+      if (cliccate.size === immagini.length) {
+        document.getElementById("btnVediPoesia").style.display = "inline-block";
+      }
     }
 
+    function mostraPoesia() {
+      document.getElementById("poesia").style.display = "block";
+      document.getElementById("copyBtn").style.display = "inline-block";
+      document.getElementById("btnVediPoesia").style.display = "none";
+      document.getElementById("gallery").style.display = "none";
+      // Mostro anche di nuovo il range e tutto per eventuali nuovi cicli
+      document.getElementById("slider-container").style.display = "block";
+    }
+
+    // Inizializzo il range
     updatePunteggio(10);
   </script>
 </body>
