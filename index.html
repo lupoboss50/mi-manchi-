@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Quanto ti manco?</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
     body {
       margin: 0;
@@ -13,42 +13,35 @@
       color: #333;
       text-align: center;
     }
-
     h1 {
       color: #d81b60;
       font-size: 2rem;
       margin-bottom: 1rem;
     }
-
     .table-container {
       max-width: 90%;
       margin: auto;
     }
-
     input[type="range"] {
       width: 100%;
       accent-color: #d81b60;
       margin: 1rem 0;
     }
-
     .range-value {
       font-size: 1.2rem;
       color: #d81b60;
       font-weight: bold;
     }
-
     .result {
       margin-top: 1rem;
       font-size: 1.3rem;
       font-weight: bold;
       color: #d81b60;
     }
-
     #heartButton {
       display: none;
       margin-top: 1rem;
     }
-
     #heartButton button {
       font-size: 2rem;
       padding: 1rem 2rem;
@@ -59,16 +52,13 @@
       cursor: pointer;
       transition: background 0.3s ease;
     }
-
     #heartButton button:hover {
       background-color: #c2185b;
     }
-
     .photo-gallery {
       display: none;
       margin-top: 2rem;
     }
-
     .photo-gallery img {
       width: 100%;
       border-radius: 12px;
@@ -76,17 +66,14 @@
       margin-bottom: 1rem;
       transition: transform 0.3s ease;
     }
-
     .photo-gallery img:hover {
       transform: scale(1.02);
     }
-
     .caption {
       font-size: 1.1rem;
       margin-top: 1rem;
       color: #d81b60;
     }
-
     .back-button {
       background-color: #42a5f5;
       padding: 0.5rem 1rem;
@@ -97,13 +84,59 @@
       cursor: pointer;
       margin-top: 1rem;
     }
+    /* Stile poesia */
+    #poesia {
+      margin: 2rem auto;
+      max-width: 600px;
+      background: white;
+      border-radius: 16px;
+      padding: 1.5rem 2rem;
+      box-shadow: 0 4px 12px rgba(216, 27, 96, 0.3);
+      color: #d81b60;
+      font-style: italic;
+      font-size: 1.2rem;
+      line-height: 1.6;
+      white-space: pre-line;
+      user-select: text;
+    }
+    #copyBtn {
+      margin-top: 1rem;
+      font-size: 1.4rem;
+      background-color: #d81b60;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      padding: 0.8rem 2rem;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    #copyBtn:hover {
+      background-color: #c2185b;
+    }
   </style>
 </head>
 <body>
   <h1>Quanto ti manco?</h1>
 
+  <div id="poesia">
+Federica, luce dolce nei miei giorni più bui,  
+con quegli occhi che raccontano storie senza parole,  
+sei la forza gentile che mi completa e mi ispira.  
+
+Io, Cozmin, con il cuore aperto e la voglia di essere me stesso,  
+trovo in te il sorriso che accende ogni mia giornata,  
+la complicità di chi sa ridere anche degli scemi che facciamo insieme.  
+
+Ti amo da morire, e anche quando siamo in pubblico a fare i pazzi,  
+so che con te posso essere davvero Lupo, senza maschere.  
+
+Sei il mio porto sicuro, il mio rifugio di pace e follia,  
+e ogni momento con te è una poesia che non smetterò mai di scrivere.
+  </div>
+  <button id="copyBtn" onclick="copiaPoesia()">Conservami💜</button>
+
   <div class="table-container">
-    <input type="range" id="range" min="10" max="100" step="10" value="10" oninput="updatePunteggio(this.value)">
+    <input type="range" id="range" min="10" max="100" step="10" value="10" oninput="updatePunteggio(this.value)" />
     <div class="range-value" id="rangeVal">10%</div>
     <div class="result" id="risultato"></div>
     <div id="heartButton">
@@ -114,6 +147,16 @@
   <div class="photo-gallery" id="gallery"></div>
 
   <script>
+    // Poesia da copiare
+    function copiaPoesia() {
+      const testo = document.getElementById("poesia").innerText;
+      navigator.clipboard.writeText(testo).then(() => {
+        alert("Poesia copiata negli appunti! Conservami💜");
+      }, () => {
+        alert("Ops, non sono riuscito a copiare la poesia.");
+      });
+    }
+
     const frasiRange = [
       "Mi basta pensarti per sorridere.",
       "Sei la bellezza che colora i miei giorni.",
